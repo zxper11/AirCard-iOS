@@ -1,0 +1,36 @@
+name: Build AirCard-iOS IPA
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build IPA
+    runs-on: macos-14  # Requires macOS runner with Xcode pre-installed
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: |
+          brew install xcodegen
+
+      - name: Make Build Script Executable
+        run: |
+          chmod +x build-ipa.sh
+
+      - name: Build IPA via Script
+        run: |
+          ./build-ipa.sh
+
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AirCard-iOS-IPA
+          path: build/AirCard-iOS.ipa
+          retention-days: 7
