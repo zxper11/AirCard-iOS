@@ -10,11 +10,16 @@ on:
 jobs:
   build:
     name: Build IPA
-    runs-on: macos-14  # Requires macOS runner with Xcode pre-installed
+    runs-on: macos-15  # Upgraded to macos-15 to support newer Xcode project formats
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
+      - name: Select Xcode Version
+        run: |
+          sudo xcode-select -switch /Applications/Xcode.app
+          xcodebuild -version
 
       - name: Install XcodeGen
         run: |
